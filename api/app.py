@@ -2,7 +2,7 @@ from flask import Flask
 import os
 from dotenv import load_dotenv
 import pusher
-from models import db
+from api.models import db
 
 load_dotenv()
 app = Flask(__name__)
