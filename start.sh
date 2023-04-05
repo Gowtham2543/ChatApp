@@ -2,4 +2,4 @@
 
 export FLASK_APP=./app.py
 
-pipenv run python3 app.py
+pipenv run flask --debug run -h 0.0.0.0

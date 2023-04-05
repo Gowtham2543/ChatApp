@@ -8,6 +8,10 @@ flask = "*"
 flask-socketio = "*"
 gevent = "*"
 gevent-websocket = "*"
+flask-sqlalchemy = "*"
+pusher = "*"
+python-dotenv = "*"
+mysqlclient = "*"
 
 [dev-packages]
 

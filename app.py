@@ -1,18 +1,24 @@
 from flask import Flask
-from flask_socketio import SocketIO, send
+import os
+from dotenv import load_dotenv
+import pusher
+from models import db
 
+load_dotenv()
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins="*")
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqldb://root:1234@localhost/Chat" 
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db.init_app(app)
 
-@socketio.on("message")
-def handle_message(message):
-    print("Message : " + message)
+pusher = pusher.Pusher(
+    app_id=os.getenv('PUSHER_APP_ID'),
+    key=os.getenv('PUSHER_KEY'),
+    secret=os.getenv('PUSHER_SECRET'),
+    cluster=os.getenv('PUSHER_CLUSTER'),
+    ssl=True)
 
-    send(message, broadcast=True)
 
 @app.route("/")
 def main():
-    return "HEllo"
+    return "Hello"
 
-if __name__ == "__main__":
-    socketio.run(app, host="localhost")
