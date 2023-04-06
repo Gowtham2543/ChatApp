@@ -4,27 +4,34 @@ db = SQLAlchemy()
 
 class User(db.Model):
     __tablename__ = "user"
-    userid = db.Column(db.String(36), primary_key = True, autoincrement = False)
-    name = db.Column(db.String(100))
-    email = db.Column(db.String(100))
+    name = db.Column(db.String(100), primary_key = True, autoincrement = False)
     password = db.Column(db.String(256))
 
-    def __init__(self, userid, name, email, password):
-        self.userid = userid
+    def __init__(self, name, password):
         self.name = name
-        self.email = email
         self.password = password
 
 class Message(db.Model):
     __tablename__ = "message"
     messageid = db.Column(db.String(36), primary_key = True, autoincrement = False)
-    sender_id = db.Column(db.String(36))
-    receiver_id = db.Column(db.String(36))
+    senderid = db.Column(db.String(100))
+    receiverid = db.Column(db.String(100))
     body = db.Column(db.String(100))
+
+    def __init__(self, messageid, senderid, receiverid, body):
+        self.messageid = messageid
+        self.senderid = senderid
+        self.receiverid = receiverid
+        self.body = body
 
 class Channel(db.Model):
     __tablename__ = "channel"
-    channelid = db.Column(db.String(73), primary_key = True, autoincrement = False)
-    user1 = db.Column(db.String(36))
-    user2 = db.Column(db.String(36))
+    channelid = db.Column(db.String(200), primary_key = True, autoincrement = False)
+    user1 = db.Column(db.String(100))
+    user2 = db.Column(db.String(100))
+
+    def __init__ (self, channelid, user1, user2):
+        self.channelid = channelid
+        self.user1 = user1
+        self.user2 = user2
     
