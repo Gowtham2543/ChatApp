@@ -16,12 +16,14 @@ class Message(db.Model):
     messageid = db.Column(db.String(36), primary_key = True, autoincrement = False)
     senderid = db.Column(db.String(100))
     receiverid = db.Column(db.String(100))
+    channelid = db.Column(db.String(36))
     body = db.Column(db.String(100))
 
-    def __init__(self, messageid, senderid, receiverid, body):
+    def __init__(self, messageid, senderid, receiverid, channelid, body):
         self.messageid = messageid
         self.senderid = senderid
         self.receiverid = receiverid
+        self.channelid = channelid
         self.body = body
 
 class Channel(db.Model):
