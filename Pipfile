@@ -12,6 +12,7 @@ flask-sqlalchemy = "*"
 pusher = "*"
 python-dotenv = "*"
 mysqlclient = "*"
+flask-cors = "*"
 
 [dev-packages]
 

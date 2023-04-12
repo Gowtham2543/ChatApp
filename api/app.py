@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 from models import db, User, Channel, Message
@@ -6,11 +7,13 @@ import os
 import pusher
 import uuid
 
+
 load_dotenv()
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqldb://root:1234@localhost/Chat" 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
+CORS(app)
 
 pusher = pusher.Pusher(
     app_id=os.getenv('PUSHER_APP_ID'),
@@ -90,7 +93,7 @@ def start(sender, receiver):
 @app.route("/message/<sender>/<receiver>", methods = ["POST"])
 def message(sender, receiver):
     data = request.get_json()
-    new_message = Message(str(uuid.uuid4), sender, receiver, data["channel"], data["message"])
+    new_message = Message(str(uuid.uuid4()), sender, receiver, data["channel"], data["message"])
 
     db.session.add(new_message)
     db.session.commit()
@@ -117,6 +120,6 @@ def allmessages(sender, receiver):
         messages = Message.query.filter_by(channelid = channel.channelid).all()
 
         return jsonify(
-            [{"sender" : message.senderid, "receiver" : message.receiverid, "body" : message.body} for message in messages]
+            [{"sender" : message.senderid, "receiver" : message.receiverid, "body" : message.body, "timestamp" : message.timestamp} for message in messages].sort()
         )
 
