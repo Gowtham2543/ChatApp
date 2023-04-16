@@ -6,6 +6,8 @@ from models import db, User, Channel, Message
 import os
 import pusher
 import uuid
+import operator
+import datetime
 
 
 load_dotenv()
@@ -93,7 +95,7 @@ def start(sender, receiver):
 @app.route("/message/<sender>/<receiver>", methods = ["POST"])
 def message(sender, receiver):
     data = request.get_json()
-    new_message = Message(str(uuid.uuid4()), sender, receiver, data["channel"], data["message"])
+    new_message = Message(str(uuid.uuid4()), sender, receiver, data["channel"], data["message"], datetime.datetime.now())
 
     db.session.add(new_message)
     db.session.commit()
@@ -119,7 +121,7 @@ def allmessages(sender, receiver):
     else:
         messages = Message.query.filter_by(channelid = channel.channelid).all()
 
-        return jsonify(
-            [{"sender" : message.senderid, "receiver" : message.receiverid, "body" : message.body, "timestamp" : message.timestamp} for message in messages].sort()
-        )
-
+        response = [{"sender" : message.senderid, "receiver" : message.receiverid, "body" : message.body, "timestamp" : message.timestamp} for message in messages]
+        response.sort(key=operator.itemgetter('timestamp'))
+                
+        return response

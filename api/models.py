@@ -20,12 +20,13 @@ class Message(db.Model):
     body = db.Column(db.String(100))
     timestamp = db.Column(db.DateTime)
 
-    def __init__(self, messageid, senderid, receiverid, channelid, body):
+    def __init__(self, messageid, senderid, receiverid, channelid, body, timestamp):
         self.messageid = messageid
         self.senderid = senderid
         self.receiverid = receiverid
         self.channelid = channelid
         self.body = body
+        self.timestamp = timestamp
 
 class Channel(db.Model):
     __tablename__ = "channel"
