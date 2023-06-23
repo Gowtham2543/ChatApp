@@ -15,6 +15,7 @@ mysqlclient = "*"
 flask-cors = "*"
 mysql-connector-python = "*"
 gitpython = "*"
+flask-talisman = "*"
 
 [dev-packages]
 
