@@ -8,6 +8,7 @@ import pusher
 import uuid
 import operator
 import datetime
+import git
 
 
 load_dotenv()
@@ -34,6 +35,14 @@ pusher = pusher.Pusher(
 @app.route("/")
 def main():
     return "Hello"
+
+@app.route("/updateServer", methods = ['POST'])
+def updateServer():
+    repo = git.Repo("/home/Balamurugan1234/chatApp");
+    origin = repo.remote.origin
+    origin.pull()
+
+    return 'Updated Successfully', 200
 
 @app.route("/userlist", methods = ["GET"])
 def userlist():
