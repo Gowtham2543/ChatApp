@@ -42,7 +42,7 @@ def main():
 @app.route("/updateServer", methods = ['POST'])
 def updateServer():
     repo = git.Repo("/home/Balamurugan1234/chatApp");
-    origin = repo.remote.origin
+    origin = repo.remotes.origin
     origin.pull()
 
     return 'Updated Successfully', 200
