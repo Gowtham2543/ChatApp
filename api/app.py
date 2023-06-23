@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from flask_talisman import Talisman
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 from api.models import db, User, Channel, Message
@@ -31,7 +30,6 @@ pusher = pusher.Pusher(
     cluster=os.getenv('PUSHER_CLUSTER'),
     ssl=True)
 
-Talisman(app)
 
 @app.route("/")
 def main():
