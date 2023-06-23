@@ -13,6 +13,7 @@ pusher = "*"
 python-dotenv = "*"
 mysqlclient = "*"
 flask-cors = "*"
+mysql-connector-python = "*"
 
 [dev-packages]
 

@@ -12,7 +12,13 @@ import datetime
 
 load_dotenv()
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqldb://root:1234@localhost/Chat" 
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+    username=os.getenv('USERNAME'),
+    password=os.getenv('PASSWORD'),
+    hostname=os.getenv('HOSTNAME'),
+    databasename=os.getenv('DATABASE'),
+) 
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 CORS(app)
