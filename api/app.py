@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_talisman import Talisman
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
-from models import db, User, Channel, Message
+from api.models import db, User, Channel, Message
 import os
 import pusher
 import uuid
@@ -32,7 +32,7 @@ pusher = pusher.Pusher(
     cluster=os.getenv('PUSHER_CLUSTER'),
     ssl=True)
 
-Talisman(app, content_security_policy=None)
+Talisman(app)
 
 @app.route("/")
 def main():
