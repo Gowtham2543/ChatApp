@@ -38,4 +38,22 @@ class Channel(db.Model):
         self.channelid = channelid
         self.user1 = user1
         self.user2 = user2
+
+class GroupTable(db.Model):
+    __tablename__ = "groupTable"
+    id = db.Column(db.Integer, primary_key = True)
+    groupname = db.Column(db.String(100))
+    username = db.Column(db.String(100))
     
+    def __init__(self, groupname, username):
+        self.groupname = groupname
+        self.username = username
+
+class GroupChannel(db.Model):
+    __tablename__ = "groupChannel"
+    channelid = db.Column(db.String(100), primary_key = True, autoincrement = False)
+    groupname = db.Column(db.String(100))
+
+    def __init__(self, channelid, groupname):
+        self.channelid = channelid
+        self.groupname = groupname

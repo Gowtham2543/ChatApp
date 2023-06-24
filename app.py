@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
-from api.models import db, User, Channel, Message
+from models import db, User, Channel, Message, GroupTable, GroupChannel
 import os
 import pusher
 import uuid
@@ -141,3 +141,64 @@ def allmessages(sender, receiver):
         response.sort(key=operator.itemgetter('timestamp'))
                 
         return response
+
+@app.route("/group/create", methods = ['POST'])
+def groupCreate():
+    data = request.get_json()
+
+    username = data["username"]
+    groupname = data["groupname"]
+
+    group = GroupTable.query.filter_by(groupname = groupname).first()
+
+    if group:
+        return jsonify(
+            {"message" : "group already exist",
+             "status" : "failed"}
+        )
+
+    group = GroupTable(groupname, username)
+    groupChannel = GroupChannel(str(uuid.uuid4()), groupname)
+
+    db.session.add(group)
+    db.session.add(groupChannel)
+    db.session.commit()
+
+    return jsonify(
+        {"groupChannel" : groupChannel.channelid,
+         "status" : "success"}
+    )
+
+@app.route("/group/join", methods = ['POST'])
+def groupJoin():
+
+    data = request.get_json()
+
+    username = data["username"]
+    groupname = data["groupname"]
+
+    group = GroupTable.query.filter_by(groupname = groupname).first()
+
+    if not group:
+        return jsonify(
+            {"status" : "no group exists"}
+        )
+
+    group = GroupTable.query.filter_by(groupname = groupname, username = username).first()
+
+    if not group:
+        group = GroupTable(groupname = groupname, username = username)
+    
+    groupChannel = GroupChannel.query.filter_by(groupname = groupname).first()
+    return jsonify(
+        {"channelid" : groupChannel.channelid,
+         "status" : "success"}
+    )
+    
+    
+
+
+
+    
+
+
