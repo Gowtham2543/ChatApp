@@ -195,10 +195,3 @@ def groupJoin():
          "status" : "success"}
     )
     
-    
-
-
-
-    
-
-
