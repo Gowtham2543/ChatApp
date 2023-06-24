@@ -57,3 +57,11 @@ class GroupChannel(db.Model):
     def __init__(self, channelid, groupname):
         self.channelid = channelid
         self.groupname = groupname
+
+class GroupMessage(db.Model):
+    __tablename__ = "groupMessage"
+    messageid = db.Column(db.String(100), primary_key = True, autoincrement = False)
+    senderid = db.Column(db.String(100))
+    channelid = db.Column(db.String(100))
+    body = db.Column(db.String(100))
+    timestamp = db.Column(db.DateTime)
