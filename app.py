@@ -13,7 +13,7 @@ import git
 load_dotenv()
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
-    username=os.getenv('USERNAME'),
+    username=os.getenv('DBUSERNAME'),
     password=os.getenv('PASSWORD'),
     hostname=os.getenv('HOSTNAME'),
     databasename=os.getenv('DATABASE'),
@@ -258,7 +258,7 @@ def groupMessage():
     groupMessage = GroupMessage(str(uuid.uuid4()), username, channelid, body, datetime.datetime.now())
     db.session.add(groupMessage)
     db.session.commit()
-    
+
     pusher.trigger(channelid, "new_group_message", message)
 
     return message
