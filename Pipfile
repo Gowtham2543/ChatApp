@@ -16,6 +16,7 @@ flask-cors = "*"
 mysql-connector-python = "*"
 gitpython = "*"
 flask-talisman = "*"
+gunicorn = "*"
 
 [dev-packages]
 
