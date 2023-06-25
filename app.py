@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
-from models import db, User, Channel, Message, GroupTable, GroupChannel
+from models import db, User, Channel, Message, GroupTable, GroupChannel, GroupMessage
 import os
 import pusher
 import uuid
@@ -228,4 +228,37 @@ def groupStart():
 
     return data
     
+@app.route("/group/message", methods = ['POST'])
+def groupMessage():
+
+    data = request.get_json()
+
+    username = data["username"]
+    groupname = data["groupname"]
+    body = data["message"]
+
+    group = GroupTable.query.filter_by(groupname = groupname, username = username).first()
+
+    if not group:
+        return jsonify(
+            {"status" : "Invalid group or havent joined the group"}
+        )
     
+    groupChannel = GroupChannel.query.filter_by(groupname = groupname).first()
+
+    channelid = groupChannel.channelid
+    
+    message = {
+        "sender" : username,
+        "group" : groupname,
+        "body" : body,
+        "channelid" : channelid
+    }
+
+    groupMessage = GroupMessage(str(uuid.uuid4()), username, channelid, body, datetime.datetime.now())
+    db.session.add(groupMessage)
+    db.session.commit()
+    
+    pusher.trigger(channelid, "new_group_message", message)
+
+    return message

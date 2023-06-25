@@ -65,3 +65,10 @@ class GroupMessage(db.Model):
     channelid = db.Column(db.String(100))
     body = db.Column(db.String(100))
     timestamp = db.Column(db.DateTime)
+
+    def __init__(self, messageid, senderid, channelid, body, timestamp):
+        self.messageid = messageid
+        self.senderid = senderid
+        self.channelid = channelid
+        self.body = body
+        self.timestamp = timestamp
