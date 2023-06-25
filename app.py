@@ -188,10 +188,44 @@ def groupJoin():
 
     if not group:
         group = GroupTable(groupname = groupname, username = username)
+        db.session.add(group)
+        db.session.commit()
     
     groupChannel = GroupChannel.query.filter_by(groupname = groupname).first()
+
+    message = username, " has joined the group chat"
+
+    pusher.trigger(groupChannel.channelid, "join_group", message)
+
     return jsonify(
         {"channelid" : groupChannel.channelid,
          "status" : "success"}
     )
+
+@app.route("/group/start", methods = ['POST'])
+def groupStart():
+
+    data = request.get_json()
+
+    username = data["username"]
+    groupname = data["groupname"]
+
+    group = GroupTable.query.filter_by(groupname = groupname, username = username).first()
+
+    if not group:
+        return jsonify(
+            {"status" : "Invalid group or havent joined the group"}
+        )
+    
+    group = GroupTable.query.filter_by(groupname = groupname).all()
+
+    groupChannel = GroupChannel.query.filter_by(groupname = groupname).first()
+
+    data = {"channelid" : groupChannel.channelid}
+    
+    for g in group:
+        pusher.trigger(g.username, "group_message", data)
+
+    return data
+    
     
