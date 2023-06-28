@@ -262,3 +262,16 @@ def groupMessage():
     pusher.trigger(channelid, "new_group_message", message)
 
     return message
+
+@app.route("/group/list", methods = ['POST', 'GET'])
+def groupList():
+    groupChannel = GroupChannel.query.all()
+
+    data = []
+    for g in groupChannel:
+        data.append({
+            "groupname" : g.groupname,
+            "channelid" : g.channelid
+        })
+
+    return data
