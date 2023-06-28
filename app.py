@@ -33,7 +33,7 @@ pusher = pusher.Pusher(
 
 @app.route("/")
 def main():
-    return "Hiii"
+    return "Chat App"
 
 
 
