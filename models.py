@@ -63,12 +63,17 @@ class GroupMessage(db.Model):
     messageid = db.Column(db.String(100), primary_key = True, autoincrement = False)
     senderid = db.Column(db.String(100))
     channelid = db.Column(db.String(100))
+    groupname = db.Column(db.String(100))
     body = db.Column(db.String(100))
     timestamp = db.Column(db.DateTime)
 
-    def __init__(self, messageid, senderid, channelid, body, timestamp):
+    def __init__(self, messageid, senderid, channelid, groupname, body, timestamp):
         self.messageid = messageid
         self.senderid = senderid
         self.channelid = channelid
+        self.groupname = groupname
         self.body = body
         self.timestamp = timestamp
+
+    def as_dict(self):
+        return {c.name : str(getattr(self, c.name)) for c in self.__table__.columns }

@@ -255,7 +255,7 @@ def groupMessage():
         "channelid" : channelid
     }
 
-    groupMessage = GroupMessage(str(uuid.uuid4()), username, channelid, body, datetime.datetime.now())
+    groupMessage = GroupMessage(str(uuid.uuid4()), username, channelid, groupname, body, datetime.datetime.now())
     db.session.add(groupMessage)
     db.session.commit()
 
@@ -274,4 +274,18 @@ def groupList():
             "channelid" : g.channelid
         })
 
+    return data
+
+@app.route("/group/allMessages", methods = ['POST', 'GET'])
+def groupAllMessages():
+    data = request.get_json()
+
+    groupname = data['groupname']
+    groupMessage = GroupMessage.query.filter_by(groupname = groupname).all()
+
+    data = []
+    for m in groupMessage:
+        data.append(m.as_dict())
+    
+    data.sort(key=operator.itemgetter('timestamp'))
     return data
