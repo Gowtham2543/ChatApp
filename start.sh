@@ -6,4 +6,6 @@
 export FLASK_APP=./app.py
 export PIPENV_VERBOSITY=-1
 
-pipenv run flask --debug run -h 0.0.0.0
+[ -z $1 ] && pipenv run flask --debug run -h 0.0.0.0
+
+! [ -z $1 ] && pipenv run gunicorn -w 4 -b 0.0.0.0:5000 app:app
